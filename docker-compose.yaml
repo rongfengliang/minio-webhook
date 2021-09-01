@@ -1,0 +1,23 @@
+version: "3"
+services:
+  webhook:
+    image: jeffail/benthos
+    volumes:
+      - "./webhook.yaml:/benthos.yaml"
+    ports:
+      - "4195:4195"
+  s3:
+    image: minio/minio
+    environment:
+      - "MINIO_ACCESS_KEY=minio"
+      - "MINIO_SECRET_KEY=minio123"
+      - "MINIO_NOTIFY_WEBHOOK_ENABLE_MYDEMO=on"
+      - "MINIO_NOTIFY_WEBHOOK_ENDPOINT_MYDEMO=http://webhook:4195"
+      - "MINIO_NOTIFY_WEBHOOK_AUTH_TOKEN_MYDEMO=demos"
+      - "MINIO_NOTIFY_WEBHOOK_QUEUE_DIR_MYDEMO=/"
+      - "MINIO_NOTIFY_WEBHOOK_QUEUE_LIMIT_MYDEMO=10000"
+      - "MINIO_NOTIFY_WEBHOOK_COMMENT_MYDEMO=DEMO"
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"

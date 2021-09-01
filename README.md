@@ -1,0 +1,2 @@
+#  minio event with webhook
+
